@@ -23,6 +23,20 @@ docker compose up -d
 
 API is available at `http://localhost/api/tasks` (through Nginx reverse proxy).
 
+## Jenkins Access
+
+Jenkins is exposed on **port 8090** (`http://localhost:8090`) instead of the default 8080.
+
+Port 8080 was already in use by Apache2 on the development machine, so Jenkins was remapped to 8090 in `docker-compose.yml`:
+
+```yaml
+jenkins:
+  ports:
+    - "8090:8080"
+```
+
+No change is needed on a machine without Apache2 — port 8090 will work out of the box.
+
 ## Environment Variables
 
 | Variable    | Description                        | Example                                  |
