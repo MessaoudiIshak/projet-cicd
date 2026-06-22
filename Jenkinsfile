@@ -47,6 +47,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Notify GitHub') {
+            steps {
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        curl -s -X POST \
+                          -H "Authorization: token ${GITHUB_TOKEN}" \
+                          -H "Content-Type: application/json" \
+                          -d "{\\"state\\":\\"success\\",\\"target_url\\":\\"http://localhost:8090\\",\\"description\\":\\"Pipeline passed\\",\\"context\\":\\"ci/jenkins\\"}" \
+                          "https://api.github.com/repos/MessaoudiIshak/projet-cicd/statuses/${GIT_COMMIT}"
+                    '''
+                }
+            }
+        }
     }
 
     post {
@@ -57,6 +71,15 @@ pipeline {
             echo 'TaskFlow API deployed successfully — http://localhost/api/tasks'
         }
         failure {
+            withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    curl -s -X POST \
+                      -H "Authorization: token ${GITHUB_TOKEN}" \
+                      -H "Content-Type: application/json" \
+                      -d "{\\"state\\":\\"failure\\",\\"target_url\\":\\"http://localhost:8090\\",\\"description\\":\\"Pipeline failed\\",\\"context\\":\\"ci/jenkins\\"}" \
+                      "https://api.github.com/repos/MessaoudiIshak/projet-cicd/statuses/${GIT_COMMIT}"
+                '''
+            }
             echo 'Build failed — check the failed stage output above'
         }
     }
