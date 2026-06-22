@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:6
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - taskflow_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    networks:
+      - taskflow_network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
+
+networks:
+  taskflow_network:
+    driver: bridge
