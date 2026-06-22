@@ -9,5 +9,6 @@ RUN apt-get update -qq && \
         > /etc/apt/sources.list.d/docker.list && \
     apt-get update -qq && \
     apt-get install -y -q docker-ce-cli docker-compose-plugin && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    usermod -aG root jenkins
 USER jenkins
