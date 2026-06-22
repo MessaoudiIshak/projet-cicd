@@ -9,12 +9,16 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node src/server.js",
     "test": "jest",
     "lint": "eslint src/"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MessaoudiIshak/projet-cicd.git"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
   }
 }
