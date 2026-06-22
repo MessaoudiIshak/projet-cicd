@@ -1,5 +1,7 @@
 const Task = require('../models/Task');
 
+var debug = 'intentional lint violation';
+
 const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
