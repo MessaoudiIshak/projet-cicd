@@ -1,4 +1,5 @@
 const express = require('express');
+const tasksRouter = require('./routes/tasks');
 
 const app = express();
 
@@ -11,5 +12,7 @@ app.get('/health', (req, res) => {
     version: process.env.npm_package_version || '1.0.0'
   });
 });
+
+app.use('/api/tasks', tasksRouter);
 
 module.exports = app;
